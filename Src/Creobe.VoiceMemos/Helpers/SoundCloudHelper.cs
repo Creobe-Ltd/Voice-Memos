@@ -11,7 +11,7 @@ namespace Creobe.VoiceMemos.Helpers
     {
         private static Regex _specialRegEx = new Regex(@"[^0-9a-zA-Z\.]+", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        private static SoundCloudAuthClient _authClient = new SoundCloudAuthClient("fa3c66c1c32cb0baba9c719b88fd7c2b");
+        private static SoundCloudAuthClient _authClient = new SoundCloudAuthClient("yourapikey");
         private static SoundCloudSession _session;
 
         public static async Task<SoundCloudSessionStatus> GetSessionStatusAsync()

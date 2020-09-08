@@ -13,7 +13,7 @@ namespace Creobe.VoiceMemos.Helpers
         private static string[] _scopes = new string[] { "wl.basic", "wl.signin", "wl.offline_access", "wl.skydrive_update" };
         private static Regex _specialRegEx = new Regex(@"[^0-9a-zA-Z\.]+", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
-        private static LiveAuthClient _authClient = new LiveAuthClient("0000000044109B61");
+        private static LiveAuthClient _authClient = new LiveAuthClient("yourapikey");
         private static LiveConnectSession _session;
 
         public static async Task<LiveConnectSessionStatus> GetSessionStatusAsync()
