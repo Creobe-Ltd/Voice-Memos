@@ -1,0 +1,172 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.ListView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cc="clr-namespace:Creobe.VoiceMemos.Controls;assembly=Creobe.VoiceMemos.Controls"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:commands="clr-namespace:Creobe.VoiceMemos.Core.Commands;assembly=Creobe.VoiceMemos.Core"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=System.Windows"
+    xmlns:addpulex="clr-namespace:AdDuplex;assembly=AdDuplex.WindowsPhone"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding List, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <cc:BindableApplicationBar.ApplicationBar>
+        <cc:BindableApplicationBar IsVisible="{Binding IsAppBarVisible}" ItemsSource="{Binding AppBarItems}" />
+    </cc:BindableApplicationBar.ApplicationBar>
+
+    <local:ViewBase.Resources>
+        <CollectionViewSource x:Name="TagsViewSource" Source="{Binding Tags}"/>
+    </local:ViewBase.Resources>
+
+    <Grid x:Name="LayoutRoot" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <phone:Pivot x:Name="Pivot" Grid.Row="0" Title="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" cc:PivotExtensions.IsLocked="{Binding IsPivotLocked}" Margin="0,32,0,0">
+                <phone:PivotItem x:Name="MemosPivotItem" Header="{Binding MemoListHeading}" >
+                    <Grid>
+                        <TextBlock Text="{Binding Path=LocalizedResources.MemoListEmptyText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}" Foreground="{StaticResource PhoneSubtleBrush}" TextWrapping="Wrap" Visibility="{Binding Path=All.Count, Converter={StaticResource EmptyToVisibilityConverter}, ConverterParameter=Visible}"/>
+                        <toolkit:LongListMultiSelector ItemsSource="{Binding All}" IsSelectionEnabled="{Binding IsSelectionEnabled, Mode=TwoWay}" toolkit:TiltEffect.IsTiltEnabled="True" Margin="-12,0,0,0" >
+                            <toolkit:LongListMultiSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,17" >
+                                        <Grid Height="48" Width="48" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,12,12" Background="{StaticResource PhoneChromeBrush}">
+                                            <Rectangle Width="48" Height="48" Fill="{StaticResource PhoneDisabledBrush}">
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush>
+                                                        <ImageBrush.ImageSource>
+                                                            <BitmapImage UriSource="/Assets/Icons/memo.xs.png" CreateOptions="BackgroundCreation"/>
+                                                        </ImageBrush.ImageSource>
+                                                    </ImageBrush>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                            <Image Stretch="UniformToFill">
+                                                <Image.Source>
+                                                    <BitmapImage UriSource="{Binding ImageFile, Converter={StaticResource IsolatedStoragePathConverter}}" CreateOptions="DelayCreation" DecodePixelHeight="76"/>
+                                                </Image.Source>
+                                            </Image>
+                                        </Grid>
+                                        <StackPanel Margin="0,-11,0,0">
+                                            <TextBlock Text="{Binding Title}" Style="{StaticResource PhoneTextLargeStyle}" TextTrimming="WordEllipsis" Margin="0"/>
+                                            <TextBlock Text="{Binding CreatedDate}" Style="{StaticResource PhoneTextSubtleStyle}" Margin="0"/>
+                                        </StackPanel>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Tap">
+                                                <i:InvokeCommandAction Command="{Binding Path=DataContext.MemoTapCommand, ElementName=Pivot}" CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </toolkit:LongListMultiSelector.ItemTemplate>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <commands:EventCommand Command="{Binding MemosSelectionChangedCommand}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </toolkit:LongListMultiSelector>
+                    </Grid>
+                </phone:PivotItem>
+                <phone:PivotItem x:Name="TagsPivotItem" Header="{Binding Path=LocalizedResources.TagListPivotHeadingText, Source={StaticResource LocalizedStrings}}" >
+                    <Grid>
+                        <phone:LongListSelector ItemsSource="{Binding Tags}" toolkit:TiltEffect.IsTiltEnabled="True">
+                            <phone:LongListSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,17">
+                                        <Rectangle Width="48" Height="48" Fill="{StaticResource PhoneForegroundBrush}">
+                                            <Rectangle.OpacityMask>
+                                                <ImageBrush>
+                                                    <ImageBrush.ImageSource>
+                                                        <BitmapImage UriSource="/Assets/AppBar/appbar.tag.png" CreateOptions="BackgroundCreation"/>
+                                                    </ImageBrush.ImageSource>
+                                                </ImageBrush>
+                                            </Rectangle.OpacityMask>
+                                        </Rectangle>
+                                        <TextBlock Text="{Binding Name}" Style="{StaticResource PhoneTextExtraLargeStyle}" Margin="12,-11,12,0"/>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="Tap">
+                                                <i:InvokeCommandAction Command="{Binding Path=DataContext.TagTapCommand, ElementName=Pivot}" CommandParameter="{Binding}"/>
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </phone:LongListSelector.ItemTemplate>
+                            <phone:LongListSelector.Template>
+                                <ControlTemplate>
+                                    <ScrollViewer>
+                                        <StackPanel>
+                                            <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" HorizontalAlignment="Left">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Rectangle Width="48" Height="48" Fill="{StaticResource PhoneForegroundBrush}">
+                                                        <Rectangle.OpacityMask>
+                                                            <ImageBrush>
+                                                                <ImageBrush.ImageSource>
+                                                                    <BitmapImage UriSource="/Assets/AppBar/appbar.tag.empty.png" CreateOptions="BackgroundCreation"/>
+                                                                </ImageBrush.ImageSource>
+                                                            </ImageBrush>
+                                                        </Rectangle.OpacityMask>
+                                                    </Rectangle>
+                                                    <TextBlock Text="untagged" Style="{StaticResource PhoneTextExtraLargeStyle}" Margin="12,-11,12,0"/>
+                                                </StackPanel>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Tap">
+                                                        <i:InvokeCommandAction Command="{Binding Path=DataContext.TagTapCommand, ElementName=Pivot}" />
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </Button>
+                                            <TextBlock Text="{Binding Path=LocalizedResources.TagListEmptyText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}" Foreground="{StaticResource PhoneSubtleBrush}" TextWrapping="Wrap" Visibility="{Binding Path=Tags.Count, Converter={StaticResource EmptyToVisibilityConverter}, ConverterParameter=Visible}"/>
+                                            <ViewportControl x:Name="ViewportControl" HorizontalContentAlignment="Stretch" VerticalAlignment="Top" Visibility="{Binding Path=Tags.Count, Converter={StaticResource EmptyToVisibilityConverter}, ConverterParameter=Collapsed}" />
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </ControlTemplate>
+                            </phone:LongListSelector.Template>
+                        </phone:LongListSelector>
+                    </Grid>
+                </phone:PivotItem>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <commands:EventCommand Command="{Binding PivotSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </phone:Pivot>
+            <addpulex:AdControl Grid.Row="1" AppId="89895" IsTest="{Binding IsDebug}" Visibility="{Binding ShowAds, Converter={StaticResource BoolToVisibilityConverter}}" />
+        </Grid>
+        <Grid Background="{StaticResource PhoneSemitransparentBrush}" Visibility="{Binding IsBusy, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="{Binding Path=LocalizedResources.BusyMessageText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</local:ViewBase>

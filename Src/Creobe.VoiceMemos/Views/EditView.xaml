@@ -1,0 +1,120 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.EditView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:cc="clr-namespace:Creobe.VoiceMemos.Controls;assembly=Creobe.VoiceMemos.Controls"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding Edit, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+    <cc:BindableApplicationBar.ApplicationBar>
+        <cc:BindableApplicationBar ItemsSource="{Binding AppBarItems}" />
+    </cc:BindableApplicationBar.ApplicationBar>
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="12,49,0,28">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <StackPanel>
+                    <Button Command="{Binding AddImageCommand}" Background="{StaticResource PhoneChromeBrush}" Style="{StaticResource FlatButtonStyle}" Margin="12,0,12,17" VerticalAlignment="Top" toolkit:TiltEffect.IsTiltEnabled="True">
+                        <Grid>
+                            <Rectangle Fill="{StaticResource PhoneDisabledBrush}" Height="210" Width="210" >
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush>
+                                        <ImageBrush.ImageSource>
+                                            <BitmapImage UriSource="/Assets/Icons/memo.md.png" CreateOptions="BackgroundCreation"/>
+                                        </ImageBrush.ImageSource>
+                                    </ImageBrush>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <Image Stretch="UniformToFill" Height="210" Width="auto">
+                                <Image.Source>
+                                    <BitmapImage UriSource="{Binding ImageFile, Converter={StaticResource IsolatedStoragePathConverter}}" CreateOptions="IgnoreImageCache"  DecodePixelWidth="720"/>
+                                </Image.Source>
+                            </Image>
+                            <Image Source="{Binding ChosenImage}" Stretch="UniformToFill" Height="210" Width="auto" />
+                            <Canvas Height="48" Width="48" VerticalAlignment="Top" HorizontalAlignment="Right" >
+                                <Path Stretch="Fill" Fill="{StaticResource PhoneAccentBrush}" Data="F1 M 58.5595,3.8147e-005L 107.519,3.8147e-005L 107.519,48.9596L 58.5595,3.8147e-005 Z " UseLayoutRounding="False" Height="48" Width="48"/>
+                                <Path Stretch="Fill" Fill="#FFF" Data="F1 M 88.6392,10.8798C 88.6392,9.62064 89.78,8.47984 91.0392,8.47984L 93.9192,8.47984C 95.1784,8.47984 96.3192,9.62064 96.3192,10.8798L 98.7191,10.8799C 100.045,10.8799 101.119,11.9544 101.119,13.2799L 101.119,19.9998C 101.119,21.3253 100.045,22.3998 98.7191,22.3998L 86.2392,22.3998C 84.9138,22.3998 83.8392,21.3253 83.8392,19.9998L 83.8392,13.2799C 83.8392,11.9544 84.9138,10.8799 86.2392,10.8799L 88.6392,10.8798 Z M 86.4792,12.3198C 86.0816,12.3198 85.7592,12.7496 85.7592,13.2798C 85.7592,13.81 86.0816,14.2398 86.4792,14.2398C 86.8769,14.2398 87.1992,13.81 87.1992,13.2798C 87.1992,12.7496 86.8769,12.3198 86.4792,12.3198 Z M 92.4792,13.2798C 90.6235,13.2798 89.1192,14.7841 89.1192,16.6398C 89.1192,18.4955 90.6235,19.9998 92.4792,19.9998C 94.3349,19.9998 95.8392,18.4955 95.8392,16.6398C 95.8392,14.7841 94.3349,13.2798 92.4792,13.2798 Z M 92.4792,14.4798C 93.6721,14.4798 94.6392,15.4469 94.6392,16.6398C 94.6392,17.8327 93.6721,18.7998 92.4792,18.7998C 91.2863,18.7998 90.3192,17.8327 90.3192,16.6398C 90.3192,15.4469 91.2863,14.4798 92.4792,14.4798 Z " UseLayoutRounding="False" Height="13.92" Canvas.Left="25.279" Canvas.Top="8.48" Width="17.28"/>
+                            </Canvas>
+                        </Grid>
+                    </Button>
+                    <TextBlock Text="{Binding LocalizedResources.TitleLabelText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    <TextBox Text="{Binding Title, Mode=TwoWay}" cc:InputExtensions.UpdateSourceOnChange="True" InputScope="Text" />
+                    <TextBlock Text="{Binding LocalizedResources.TagsLabelText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    <TextBox Text="{Binding Tags, Mode=TwoWay}" cc:InputExtensions.UpdateSourceOnChange="True" InputScope="Text" TextWrapping="Wrap" />
+                    <ListBox ItemsSource="{Binding TagList}" Margin="12,0,12,17" VerticalAlignment="Top" Visibility="{Binding Path=TagList.Count, Converter={StaticResource EmptyToVisibilityConverter}, ConverterParameter=Collapsed}" toolkit:TiltEffect.IsTiltEnabled="True" >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Background="{StaticResource PhoneChromeBrush}" Margin="0,0,4,4" >
+                                    <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource PhoneTextNormalStyle}" Margin="12" Foreground="{StaticResource PhoneBorderBrush}" />
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="Tap">
+                                            <i:InvokeCommandAction Command="{Binding Path=DataContext.TagTapCommand, ElementName=ContentPanel}" CommandParameter="{Binding}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.Template>
+                            <ControlTemplate>
+                                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" >
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                    </ListBox>
+                    <TextBlock Text="{Binding LocalizedResources.DescriptionLabelText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                    <TextBox Text="{Binding Description, Mode=TwoWay}" cc:InputExtensions.UpdateSourceOnChange="True" InputScope="Text" TextWrapping="Wrap" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>

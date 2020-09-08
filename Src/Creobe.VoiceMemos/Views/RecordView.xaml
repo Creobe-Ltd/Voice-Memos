@@ -1,0 +1,152 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.RecordView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:commands="clr-namespace:Creobe.VoiceMemos.Core.Commands;assembly=Creobe.VoiceMemos.Core"
+    xmlns:addpulex="clr-namespace:AdDuplex;assembly=AdDuplex.WindowsPhone"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding Path=Record, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneChromeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="12,49,0,28" >
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Margin="12,138,12,0">
+                <TextBlock Text="{Binding StatusText}" Style="{StaticResource PhoneTextAccentStyle}" />
+                <TextBlock Text="{Binding DurationText}" FontFamily="Segoe WP Light" FontSize="72" Margin="12,0,12,17"/>
+                <ProgressBar Value="{Binding MicrophoneLevel}" Margin="0,0,0,17"/>
+                <TextBlock Style="{StaticResource PhoneTextNormalStyle}" Margin="7,0,12,17" Visibility="{Binding IsLocationEnabled, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Run Text="&#xE139;" FontFamily="Segoe UI Symbol" />
+                    <Run Text="{Binding LocationText}" />
+                </TextBlock>
+            </StackPanel>
+            <Grid Grid.Row="1" Height="202" VerticalAlignment="Top" Margin="2,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Command="{Binding PauseResumeCommand}"  Style="{StaticResource ContentKeyButtonStyle}"  Margin="2,0,2,2">
+                    <ControlTemplate TargetType="ContentControl">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Rectangle Width="48" Height="48" Fill="{TemplateBinding Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Assets/AppBar/transport.pause.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <TextBlock Text="{Binding PauseResumeButtonText}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilyNormal}" Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="1" Command="{Binding SaveCommand}" Style="{StaticResource ContentKeyButtonStyle}"  Margin="2,0,2,2">
+                    <ControlTemplate TargetType="ContentControl">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Rectangle Width="48" Height="48" Fill="{TemplateBinding Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Assets/AppBar/save.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <TextBlock Text="{Binding Path=LocalizedResources.SaveButtonText, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilyNormal}" Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button>
+                <Button Grid.Row="0" Grid.Column="2" Command="{Binding CancelCommand}" Style="{StaticResource ContentKeyButtonStyle}" Margin="2,0,2,2">
+                    <ControlTemplate TargetType="ContentControl">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Rectangle Width="48" Height="48" Fill="{TemplateBinding Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Assets/AppBar/cancel.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <TextBlock Text="{Binding Path=LocalizedResources.CancelButtonText, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilyNormal}" Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button>
+                <Button Grid.Row="1" Grid.Column="1" Style="{StaticResource ContentKeyButtonStyle}" Visibility="Collapsed" Margin="2,2,2,0">
+                    <ControlTemplate TargetType="ContentControl">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Rectangle Width="48" Height="48" Fill="{TemplateBinding Foreground}">
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Assets/AppBar/appbar.flag.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <TextBlock Text="{Binding Path=LocalizedResources.AddMarkerButtonText, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilyNormal}" Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button>
+                <ToggleButton Grid.Row="1" Grid.Column="0" IsChecked="{Binding SkipSilence, Mode=TwoWay}" Margin="2,2,2,0" Style="{StaticResource ContentKeyToggleButtonStyle}" >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Checked">
+                            <commands:EventCommand Command="{Binding SkipSilenceCheckedCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="Unchecked">
+                            <commands:EventCommand Command="{Binding SkipSilenceUncheckedCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ControlTemplate TargetType="ContentControl">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" >
+                            <Rectangle Width="48" Height="48" Fill="{TemplateBinding Foreground}" >
+                                <Rectangle.OpacityMask>
+                                    <ImageBrush ImageSource="/Assets/AppBar/appbar.skip.silence.png"/>
+                                </Rectangle.OpacityMask>
+                            </Rectangle>
+                            <TextBlock Text="{Binding Path=LocalizedResources.SkipSilenceButtonText, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" FontSize="{StaticResource PhoneFontSizeNormal}" FontFamily="{StaticResource PhoneFontFamilyNormal}" Foreground="{TemplateBinding Foreground}" />
+                        </StackPanel>
+                    </ControlTemplate>
+                </ToggleButton>
+            </Grid>
+            <addpulex:AdControl Grid.Row="2" AppId="89895" IsTest="{Binding IsDebug}" Visibility="{Binding ShowAds, Converter={StaticResource BoolToVisibilityConverter}}"/>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>

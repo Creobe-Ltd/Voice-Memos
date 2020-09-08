@@ -1,0 +1,16 @@
+﻿<UserControl x:Class="Creobe.VoiceMemos.TileTemplates.MemoMediumWithImage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="336" d:DesignWidth="336">
+
+    <Grid x:Name="LayoutRoot" Background="#0000">
+        <Canvas Width="336" Height="336" Canvas.Left="0" Canvas.Top="0">
+            <Image Canvas.Left="0" Canvas.Top="0" Width="336" Height="336" Stretch="UniformToFill" Source="{Binding BackgroundImage}"/>
+            <Path Width="150" Height="150" Canvas.Left="183" Canvas.Top="3" Stretch="Fill" Fill="#80000000" Data="F1 M 58.5595,0.960007L 106.559,0.960007L 106.559,48.9596L 58.5595,0.960007 Z "/>
+            <Path Width="48.293" Height="68" Canvas.Left="261.8535" Canvas.Top="16" Stretch="Fill" Fill="#FFFFFFFF" Data="F1 M 91.5192,5.11995C 94.1451,5.11995 96.2738,7.24866 96.2738,9.87457L 96.2738,16.5452C 96.2738,19.1711 94.1451,21.2998 91.5192,21.2998C 88.8933,21.2998 86.7646,19.1711 86.7646,16.5452L 86.7646,14.2887L 90.4931,14.2887L 90.4931,13.4403L 86.7646,13.4403L 86.7646,12.5701L 90.4931,12.5701L 90.4931,11.7217L 86.7646,11.7217L 86.7646,10.8516L 90.4931,10.8516L 90.4931,10.0031L 86.7646,10.0031L 86.7646,9.87457L 86.8221,9.133L 90.4931,9.133L 90.4931,8.28455L 87.0369,8.28455C 87.6911,6.44056 89.4509,5.11995 91.5192,5.11995 Z M 88.0591,25.7662L 90.877,25.7662L 90.877,24.373C 86.9853,24.0529 83.9105,20.8502 83.7924,16.9046L 85.2309,16.9046C 85.3548,20.2707 88.1227,22.9616 91.5192,22.9616C 94.9156,22.9616 97.6836,20.2707 97.8075,16.9046L 99.246,16.9046C 99.1279,20.8502 96.0531,24.0529 92.1614,24.373L 92.1614,25.7662L 94.9793,25.7662L 94.9793,26.8798L 88.0591,26.8798L 88.0591,25.7662 Z "/>
+        </Canvas>
+    </Grid>
+</UserControl>

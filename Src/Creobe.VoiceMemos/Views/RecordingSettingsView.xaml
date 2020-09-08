@@ -1,0 +1,100 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.RecordingSettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    xmlns:commands="clr-namespace:Creobe.VoiceMemos.Core.Commands;assembly=Creobe.VoiceMemos.Core"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding RecordingSettings, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+    
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="12,49,0,28">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.RecordingSettingsViewTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <StackPanel VerticalAlignment="Top" toolkit:TiltEffect.IsTiltEnabled="True">
+                    <toolkit:ListPicker Header="{Binding Path=LocalizedResources.QualityLabelText, Source={StaticResource LocalizedStrings}}" ItemsSource="{Binding QualityList}" SelectedItem="{Binding Quality, Mode=TwoWay}"  SelectionMode="Single" Margin="12,0,12,17" >
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <commands:EventCommand Command="{Binding QualitySelectedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </toolkit:ListPicker>
+                    <toolkit:ListPicker Header="{Binding Path=LocalizedResources.ChannelsLabelText, Source={StaticResource LocalizedStrings}}" ItemsSource="{Binding ChannelList}" SelectedItem="{Binding Channels, Mode=TwoWay}"  SelectionMode="Single" Margin="12,12,12,17">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <commands:EventCommand Command="{Binding ChannelsSelectedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </toolkit:ListPicker>
+                    <toolkit:ListPicker Header="{Binding Path=LocalizedResources.EncodingFormatLabelText, Source={StaticResource LocalizedStrings}}" ItemsSource="{Binding FormatList}" SelectedItem="{Binding Format, Mode=TwoWay}"  SelectionMode="Single" Margin="12,12,12,17">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <commands:EventCommand Command="{Binding FormatSelectedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </toolkit:ListPicker>
+                    <toolkit:ListPicker Header="{Binding Path=LocalizedResources.EncodingQualityLabelText, Source={StaticResource LocalizedStrings}}" ItemsSource="{Binding BitRateList}" SelectedItem="{Binding BitRate, Mode=TwoWay}"  SelectionMode="Single" Visibility="{Binding ShowBitRate, Converter={StaticResource BoolToVisibilityConverter}}" Margin="12,12,12,17">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <commands:EventCommand Command="{Binding BitRateSelectedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </toolkit:ListPicker>
+                    <CheckBox Content="{Binding Path=LocalizedResources.SkipSilenceCheckboxText, Source={StaticResource LocalizedStrings}}" IsChecked="{Binding SkipSilence, Mode=TwoWay}" Command="{Binding SkipSilenceChangedCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.SkipSilenceHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}" TextWrapping="Wrap" Margin="12,0,12,17"/>
+                    <CheckBox Content="{Binding Path=LocalizedResources.RecordInBackgroundCheckboxText, Source={StaticResource LocalizedStrings}}" IsChecked="{Binding RecordInBackground, Mode=TwoWay}" Command="{Binding RecordInBackgroundChangedCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}" />
+                    <TextBlock Text="{Binding Path=LocalizedResources.RecordInBackgroundHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}" TextWrapping="Wrap" Margin="12,0,12,17"/>
+                    <CheckBox Content="{Binding Path=LocalizedResources.RecordUnderLockCheckboxText, Source={StaticResource LocalizedStrings}}" IsChecked="{Binding RecordUnderLock, Mode=TwoWay}" Command="{Binding RecordUnderLockChangedCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}" IsEnabled="{Binding RecordInBackground, Converter={StaticResource InverseBoolConverter}}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.RecordUnderLockHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}" TextWrapping="Wrap" Margin="12,0,12,17"/>
+                    <CheckBox Content="{Binding Path=LocalizedResources.EditDetailsCheckboxText, Source={StaticResource LocalizedStrings}}" IsChecked="{Binding EditDetails, Mode=TwoWay}" Command="{Binding EditDetailsChangedCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.EditDetailsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}" TextWrapping="Wrap" Margin="12,0,12,17"/>
+                    <CheckBox Content="{Binding Path=LocalizedResources.AddLocationCheckboxText, Source={StaticResource LocalizedStrings}}" IsChecked="{Binding AddLocation, Mode=TwoWay}" Command="{Binding AddLocationChangedCommand}" CommandParameter="{Binding Path=IsChecked, RelativeSource={RelativeSource Mode=Self}}"/>
+                    <TextBlock Text="{Binding Path=LocalizedResources.AddLocationHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}" TextWrapping="Wrap" Margin="12,0,12,17"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>

@@ -1,0 +1,149 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.LoginView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding Login, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0" >
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:SlideTransition Mode="SlideDownFadeOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="{StaticResource PhoneAccentBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+
+        <!--ContentPanel - place additional content here-->
+        <Grid>
+            <Rectangle Fill="#FFF" Width="210" Height="210">
+                <Rectangle.OpacityMask>
+                    <ImageBrush>
+                        <ImageBrush.ImageSource>
+                            <BitmapImage UriSource="/Assets/Icons/memo.md.png" CreateOptions="BackgroundCreation"/>
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </Rectangle.OpacityMask>
+            </Rectangle>
+        </Grid>
+        <Grid x:Name="KeypadPanel" Grid.Row="1" Background="{StaticResource PhoneChromeBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <!--<Button Command="{Binding TestCommand}" Content="Test" VerticalAlignment="Top"/>-->
+			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Height="82">
+                <TextBlock Text="{Binding Path=LocalizedResources.PasswordWaterMarkText, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="{StaticResource PhoneFontFamilySemiBold}" Visibility="{Binding ShowWaterMark, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <TextBlock Text="{Binding MaskedPassword}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="{StaticResource PhoneFontSizeLarge}" FontFamily="Segoe UI Symbol"/>
+			</Grid>
+            <Button Grid.Row="1" Grid.Column="0" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyOneText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="1"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="1" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyTwoText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="2"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="1" Grid.Column="2" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyThreeText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="3"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="0" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyFourText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="4"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="1" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyFiveText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="5"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="2" Grid.Column="2" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeySixText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="6"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="0" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeySevenText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="7"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="1" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyEightText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="8"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="3" Grid.Column="2" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyNineText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="9"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="0" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}">
+            </Button>
+            <Button Grid.Row="4" Grid.Column="1" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.NumericKeyZeroText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="0"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            <Button Grid.Row="4" Grid.Column="2" Width="152" Height="78" Margin="4" Style="{StaticResource KeyButtonStyle}" Content="{Binding Path=LocalizedResources.BackspaceKeyText, Source={StaticResource LocalizedStrings}}">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Tap">
+                        <i:InvokeCommandAction Command="{Binding KeyPressCommand}" CommandParameter="Back"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>FlurryForWindowsPhone8</id>
+    <version>1.2</version>
+    <title>Flurry for Windows Phone</title>
+    <authors>Flurry</authors>
+    <owners>Flurry</owners>
+    <licenseUrl>http://www.flurry.com/tos.html</licenseUrl>
+    <projectUrl>http://www.flurry.com/</projectUrl>
+    <iconUrl>http://support.flurry.com/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Installs the flurry SDK to your windows phone 8 project.</description>
+    <releaseNotes />
+    <copyright />
+    <language />
+    <tags>WP8 WinPhone flurry flurry sdk</tags>
+  </metadata>
+</package>

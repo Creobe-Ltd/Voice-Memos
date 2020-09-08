@@ -1,0 +1,90 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.SettingsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding Settings, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+    <toolkit:TransitionService.NavigationInTransition>
+        <toolkit:NavigationInTransition>
+            <toolkit:NavigationInTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardIn"/>
+            </toolkit:NavigationInTransition.Forward>
+            <toolkit:NavigationInTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardIn"/>
+            </toolkit:NavigationInTransition.Backward>
+        </toolkit:NavigationInTransition>
+    </toolkit:TransitionService.NavigationInTransition>
+
+    <toolkit:TransitionService.NavigationOutTransition>
+        <toolkit:NavigationOutTransition>
+            <toolkit:NavigationOutTransition.Forward>
+                <toolkit:TurnstileTransition Mode="ForwardOut"/>
+            </toolkit:NavigationOutTransition.Forward>
+            <toolkit:NavigationOutTransition.Backward>
+                <toolkit:TurnstileTransition Mode="BackwardOut"/>
+            </toolkit:NavigationOutTransition.Backward>
+        </toolkit:NavigationOutTransition>
+    </toolkit:TransitionService.NavigationOutTransition>
+    
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="12,49,0,28">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.SettingsViewTitle, Source={StaticResource LocalizedStrings}}" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <ScrollViewer>
+                <StackPanel VerticalAlignment="Top" toolkit:TiltEffect.IsTiltEnabled="True">
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" Command="{Binding AccountsCommand}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.AccountSettingsButtonText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.AccountSettingsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" Command="{Binding GeneralCommand}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.GeneralSettingsButtonText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.GeneralSettingsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" Command="{Binding RecordingCommand}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.RecordingSettingsButtonText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.RecordingSettingsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" Command="{Binding SecurityCommand}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.SecuritySettingsButtonText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.SecuritySettingsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource FlatButtonStyle}" Margin="0,0,0,17" Command="{Binding StorageCommand}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=LocalizedResources.StorageSettingsButtonText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextLargeStyle}"/>
+                            <TextBlock Text="{Binding Path=LocalizedResources.StorageSettingsHelpText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextSubtleStyle}"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>

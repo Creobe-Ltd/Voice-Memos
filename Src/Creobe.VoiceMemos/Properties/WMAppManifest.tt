@@ -1,0 +1,63 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".xml" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<#@ include file="ProjectVariables.ttinclude" #><# 
+string AppTitle = IsBeta ? "Voice Memos BETA" : "Voice Memos"; #>
+<?xml version="1.0" encoding="utf-8"?>
+<Deployment xmlns="http://schemas.microsoft.com/windowsphone/2012/deployment" AppPlatformVersion="8.0">
+  <DefaultLanguage xmlns="" code="en-US" />
+  <Languages xmlns="" />
+  <AppExtra AppPlatformVersion="8.0" xmlns="">
+    <Extra Name="SDOptOut" />
+  </AppExtra>
+  <App xmlns="" ProductID=<#= AppId #> Title="<#= AppTitle #>" RuntimeType="Silverlight" Version=<#= Version #> Genre="apps.normal" Author="Creobe Ltd." Description="Sample description" Publisher="Creobe Ltd." PublisherID="{5809c10f-5888-4557-9d14-83b4ffdde14e}" >
+    <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
+    <Capabilities>
+      <Capability Name="ID_CAP_NETWORKING" />
+      <Capability Name="ID_CAP_MEDIALIB_AUDIO" />
+      <Capability Name="ID_CAP_MEDIALIB_PLAYBACK" />
+      <Capability Name="ID_CAP_SENSORS" />
+      <Capability Name="ID_CAP_WEBBROWSERCOMPONENT" />
+      <Capability Name="ID_CAP_MICROPHONE" />
+      <Capability Name="ID_CAP_LOCATION" />
+      <Capability Name="ID_CAP_MAP" />
+      <Capability Name="ID_CAP_SPEECH_RECOGNITION" />
+      <Capability Name="ID_CAP_IDENTITY_DEVICE" />
+	  <Capability Name="ID_CAP_VOIP" />
+    </Capabilities>
+    <Tasks>
+      <DefaultTask Name="_default" NavigationPage="Views/MainView.xaml" ActivationPolicy="Resume">
+        <BackgroundExecution>
+          <ExecutionType Name="LocationTracking"/>
+        </BackgroundExecution>
+      </DefaultTask>
+      <ExtendedTask Name="AudioPlayerTask">
+        <BackgroundServiceAgent Specifier="AudioPlayerAgent" Name="PlaybackAgent" Source="Creobe.VoiceMemos.Media.PlaybackAgent" Type="Creobe.VoiceMemos.Media.PlaybackAgent.AudioPlayer" />
+      </ExtendedTask>
+    </Tasks>
+    <Tokens>
+      <PrimaryToken TokenID="Creobe.VoiceMemosToken" TaskName="_default">
+        <TemplateIconic>
+          <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileSmall.png</SmallImageURI>
+          <IconImageURI IsRelative="true" IsResource="false">Assets\Tiles\IconicTileMediumLarge.png</IconImageURI>
+          <Title>Voice Memos</Title>
+          <HasLarge>false</HasLarge>
+        </TemplateIconic>
+      </PrimaryToken>
+    </Tokens>
+    <ScreenResolutions>
+      <ScreenResolution Name="ID_RESOLUTION_WVGA" />
+      <ScreenResolution Name="ID_RESOLUTION_WXGA" />
+      <ScreenResolution Name="ID_RESOLUTION_HD720P" />
+    </ScreenResolutions>
+  </App>
+</Deployment>

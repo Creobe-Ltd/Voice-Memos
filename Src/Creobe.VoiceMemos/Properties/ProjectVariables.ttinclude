@@ -1,0 +1,87 @@
+﻿<#@ assembly name="System.Core" #>
+<#@ assembly name="EnvDTE" #>
+<#@ import namespace="EnvDTE" #>
+<#@ import namespace="System" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Diagnostics" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.Globalization" #>
+<# IServiceProvider hostServiceProvider = (IServiceProvider)Host;
+EnvDTE.DTE dte = (EnvDTE.DTE)hostServiceProvider.GetService(typeof(EnvDTE.DTE));
+
+EnvDTE.ProjectItem containingProjectItem = dte.Solution.FindProjectItem(Host.TemplateFile);
+Project project = containingProjectItem.ContainingProject;
+var projectName = project.FullName;
+ProjectItem deploymentConfig = GetProjectItem(project, "DeploymentConfig.cs");
+
+if (deploymentConfig == null)
+{
+    throw new Exception("Unable to resolve DeploymentConfig.cs file");
+}
+
+var codeModel = deploymentConfig.FileCodeModel;
+bool IsBeta = false;
+string Version = string.Empty;
+string AppId = string.Empty;
+
+foreach (CodeElement codeElement in codeModel.CodeElements)
+{
+    if (codeElement.Name == "DeploymentConfig")
+    {
+        CodeClass codeClass = (CodeClass)codeElement;
+        foreach (CodeElement memberElement in codeClass.Members)
+        {
+            if (memberElement.Name == "_isBeta")
+            {
+                CodeVariable variable = (CodeVariable)memberElement;
+                IsBeta = bool.Parse(variable.InitExpression.ToString());
+            }
+
+			if (memberElement.Name == "_version")
+            {
+                CodeVariable variable = (CodeVariable)memberElement;
+                Version = variable.InitExpression.ToString();
+            }
+
+			if (memberElement.Name == "_appId")
+            {
+                CodeVariable variable = (CodeVariable)memberElement;
+                AppId = variable.InitExpression.ToString();
+            }
+        }
+    }
+}#>
+<#+ EnvDTE.ProjectItem GetProjectItem(Project project, string fileName)
+{
+    foreach (ProjectItem projectItem in project.ProjectItems)
+    {
+        if (projectItem.Name.EndsWith(fileName))
+        {
+            return projectItem;
+        }
+        var item = GetProjectItem(projectItem, fileName);
+        if (item != null)
+        {
+            return item;
+        }
+    }
+    return null;
+}
+
+EnvDTE.ProjectItem GetProjectItem(EnvDTE.ProjectItem projectItem, string fileName)
+{
+    if (projectItem.ProjectItems != null 
+        && projectItem.ProjectItems.Count > 0)
+    {
+        foreach (ProjectItem item in projectItem.ProjectItems)
+        {
+            if (item.Name.EndsWith(fileName))
+            {
+                return item;
+            }
+        }
+    }
+    return null;
+} #>

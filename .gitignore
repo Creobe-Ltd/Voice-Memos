@@ -1,0 +1,10 @@
+# System Files
+.DS_Store
+
+# Visual Studio
+.vscode
+src/.vs
+
+# Build Results
+src/TemplateConsole/bin
+src/TemplateConsole/obj

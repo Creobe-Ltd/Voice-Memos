@@ -1,0 +1,66 @@
+﻿<local:ViewBase
+    x:Class="Creobe.VoiceMemos.AboutView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Creobe.VoiceMemos;assembly=Creobe.VoiceMemos"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    DataContext="{Binding Path=About, Source={StaticResource ViewModelLocator}}"
+    shell:SystemTray.IsVisible="True" shell:SystemTray.Opacity="0">
+
+	<toolkit:TransitionService.NavigationInTransition>
+		<toolkit:NavigationInTransition>
+			<toolkit:NavigationInTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardIn"/>
+			</toolkit:NavigationInTransition.Forward>
+			<toolkit:NavigationInTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardIn"/>
+			</toolkit:NavigationInTransition.Backward>
+		</toolkit:NavigationInTransition>
+	</toolkit:TransitionService.NavigationInTransition>
+
+	<toolkit:TransitionService.NavigationOutTransition>
+		<toolkit:NavigationOutTransition>
+			<toolkit:NavigationOutTransition.Forward>
+				<toolkit:TurnstileTransition Mode="ForwardOut"/>
+			</toolkit:NavigationOutTransition.Forward>
+			<toolkit:NavigationOutTransition.Backward>
+				<toolkit:TurnstileTransition Mode="BackwardOut"/>
+			</toolkit:NavigationOutTransition.Backward>
+		</toolkit:NavigationOutTransition>
+	</toolkit:TransitionService.NavigationOutTransition>
+
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="12,49,0,28">
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}"/>
+        </StackPanel>
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+            <StackPanel>
+                <TextBlock Text="{Binding VersionText}" Style="{StaticResource PhoneTextNormalStyle}"/>
+                <TextBlock Text="{Binding CopyrightText}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0,12,17"/>
+                <TextBlock Text="{Binding InfoText}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0,12,17" TextWrapping="Wrap"/>
+                <TextBlock Text="{Binding Path=LocalizedResources.LameMp3InfoText, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0,12,17" TextWrapping="Wrap"/>
+                <Button Content="{Binding Path=LocalizedResources.ReportBugButtonText, Source={StaticResource LocalizedStrings}}" Command="{Binding ReportBugCommand}" Visibility="{Binding ShowReportBugButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <!--<Button Content="{Binding Path=LocalizedResources.ChangeLogButtonText, Source={StaticResource LocalizedStrings}}" Command="{Binding ChangeLogCommand}" Visibility="{Binding ShowChangeLogButton, Converter={StaticResource BoolToVisibilityConverter}}"/>-->
+                <Button Content="{Binding Path=LocalizedResources.SupportButtonText, Source={StaticResource LocalizedStrings}}" Command="{Binding SupportCommand}" Visibility="{Binding ShowSupportButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="{Binding Path=LocalizedResources.RateButtonText, Source={StaticResource LocalizedStrings}}" Command="{Binding RateCommand}" Visibility="{Binding ShowRateButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                <Button Content="{Binding Path=LocalizedResources.OtherAppsButtonText, Source={StaticResource LocalizedStrings}}" Command="{Binding OtherAppsCommand}" Visibility="{Binding ShowOtherAppsButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+
+</local:ViewBase>
